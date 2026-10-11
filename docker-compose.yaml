@@ -8,9 +8,9 @@ services:
       POSTGRES_PASSWORD: banca123
       POSTGRES_DB: postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
-      - ./BaseDatos.sql:/docker-entrypoint-initdb.d/01-BaseDatos.sql:ro
+      - ./db.sql:/docker-entrypoint-initdb.d/01-BaseDatos.sql:ro
       - pgdata:/var/lib/postgresql/data
     healthcheck:
       # -h localhost fuerza TCP: solo responde cuando terminó de ejecutar BaseDatos.sql
