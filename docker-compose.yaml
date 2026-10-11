@@ -1,0 +1,37 @@
+name: banca-microservicios
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: banca-postgres
+    environment:
+      POSTGRES_USER: banca
+      POSTGRES_PASSWORD: banca123
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./BaseDatos.sql:/docker-entrypoint-initdb.d/01-BaseDatos.sql:ro
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # -h localhost fuerza TCP: solo responde cuando terminó de ejecutar BaseDatos.sql
+      test: ["CMD-SHELL", "pg_isready -h localhost -U banca -d cuentas_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: banca-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: banca
+      RABBITMQ_DEFAULT_PASS: banca123
+    ports:
+      - "5672:5672"
+      - "15672:15672"   # consola web: http://localhost:15672 (banca / banca123)
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+volumes:
+  pgdata:
