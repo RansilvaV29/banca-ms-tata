@@ -51,10 +51,7 @@ public abstract class Persona {
         actualizarDatosPersonales(nombre, genero, edad, direccion, telefono);
     }
 
-    /**
-     * Actualiza los datos personales protegiendo las invariantes del dominio.
-     * La identificación no se modifica: es la identidad natural de la persona.
-     */
+
     public void actualizarDatosPersonales(String nombre, Genero genero, Integer edad,
                                           String direccion, String telefono) {
         if (edad != null && edad < 0) {

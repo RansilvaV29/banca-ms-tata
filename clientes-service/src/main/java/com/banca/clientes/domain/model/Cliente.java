@@ -65,10 +65,7 @@ public class Cliente extends Persona {
         return Boolean.TRUE.equals(estado);
     }
 
-    /**
-     * Patrón Builder: el cliente tiene 9 atributos, un constructor con 9 parámetros
-     * es ilegible y propenso a errores de orden. El builder valida al construir.
-     */
+
     public static final class Builder {
         private String clienteId;
         private String nombre;
