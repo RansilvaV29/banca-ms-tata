@@ -7,10 +7,13 @@ import com.banca.clientes.domain.model.Cliente;
 import com.banca.clientes.dto.ClientePatchRequest;
 import com.banca.clientes.dto.ClienteRequest;
 import com.banca.clientes.dto.ClienteResponse;
+import com.banca.clientes.event.ClienteEvent;
+import com.banca.clientes.event.TipoEventoCliente;
 import com.banca.clientes.mapper.ClienteMapper;
 import com.banca.clientes.repository.ClienteRepository;
 import com.banca.clientes.service.ClienteService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +30,7 @@ public class ClienteServiceImpl implements ClienteService {
     private final ClienteRepository clienteRepository;
     private final ClienteMapper clienteMapper;
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public List<ClienteResponse> listar() {
@@ -66,6 +70,7 @@ public class ClienteServiceImpl implements ClienteService {
                 .build();
 
         Cliente guardado = clienteRepository.save(cliente);
+        eventPublisher.publishEvent(ClienteEvent.de(TipoEventoCliente.CLIENTE_CREADO, guardado));
         return clienteMapper.toResponse(guardado);
     }
 
@@ -84,6 +89,8 @@ public class ClienteServiceImpl implements ClienteService {
         cliente.cambiarContrasena(passwordEncoder.encode(request.contrasena()));
         cliente.cambiarEstado(Optional.ofNullable(request.estado()).orElse(cliente.getEstado()));
 
+        // No hace falta save(): la entidad está gestionada y JPA detecta los cambios (dirty checking).
+        eventPublisher.publishEvent(ClienteEvent.de(TipoEventoCliente.CLIENTE_ACTUALIZADO, cliente));
         return clienteMapper.toResponse(cliente);
     }
 
@@ -104,6 +111,7 @@ public class ClienteServiceImpl implements ClienteService {
                 .ifPresent(cliente::cambiarContrasena);
         Optional.ofNullable(request.estado()).ifPresent(cliente::cambiarEstado);
 
+        eventPublisher.publishEvent(ClienteEvent.de(TipoEventoCliente.CLIENTE_ACTUALIZADO, cliente));
         return clienteMapper.toResponse(cliente);
     }
 
@@ -112,6 +120,7 @@ public class ClienteServiceImpl implements ClienteService {
     public void eliminar(String clienteId) {
         Cliente cliente = buscar(clienteId);
         clienteRepository.delete(cliente);
+        eventPublisher.publishEvent(ClienteEvent.de(TipoEventoCliente.CLIENTE_ELIMINADO, cliente));
     }
 
     private Cliente buscar(String clienteId) {
