@@ -1,8 +1,7 @@
-package com.banca.clientes.domain.exception;
+package com.banca.clientes.domain.model;
 
-public class ReglaNegocioException extends NegocioException {
-
-    public ReglaNegocioException(String codigo, String mensaje) {
-        super(codigo, mensaje);
-    }
+public enum Genero {
+    MASCULINO,
+    FEMENINO,
+    OTRO
 }
