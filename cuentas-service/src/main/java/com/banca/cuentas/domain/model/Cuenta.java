@@ -60,10 +60,7 @@ public class Cuenta {
         redefinirSaldoInicial(saldoInicial);
     }
 
-    /**
-     * Aplica un movimiento (positivo = depósito, negativo = retiro) y devuelve el nuevo saldo.
-     * F3: si el saldo resultante sería negativo lanza "Saldo no disponible" y NO modifica nada.
-     */
+
     public BigDecimal aplicarMovimiento(BigDecimal valor) {
         validarActiva();
         validarValor(valor);
@@ -75,7 +72,6 @@ public class Cuenta {
         return nuevoSaldo;
     }
 
-    /** Deshace el efecto de un movimiento previamente aplicado. */
     public void revertirMovimiento(BigDecimal valor) {
         BigDecimal nuevoSaldo = saldoDisponible.subtract(valor);
         if (nuevoSaldo.signum() < 0) {
@@ -84,7 +80,6 @@ public class Cuenta {
         this.saldoDisponible = nuevoSaldo;
     }
 
-    /** Solo debe usarse si la cuenta aún no tiene movimientos (lo valida el servicio). */
     public void redefinirSaldoInicial(BigDecimal nuevoSaldoInicial) {
         if (nuevoSaldoInicial == null || nuevoSaldoInicial.signum() < 0) {
             throw new ReglaNegocioException("SALDO_INICIAL_INVALIDO", "El saldo inicial no puede ser negativo");

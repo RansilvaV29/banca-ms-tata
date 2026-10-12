@@ -19,7 +19,6 @@ public enum TipoMovimiento {
         return descripcion;
     }
 
-    /** El tipo se deduce del signo del valor: positivo = depósito, negativo = retiro. */
     public static TipoMovimiento desde(BigDecimal valor) {
         return valor.signum() >= 0 ? DEPOSITO : RETIRO;
     }

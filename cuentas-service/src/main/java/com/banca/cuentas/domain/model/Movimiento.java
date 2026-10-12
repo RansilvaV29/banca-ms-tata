@@ -53,10 +53,7 @@ public class Movimiento {
         this.tipoMovimiento = TipoMovimiento.desde(valor);
     }
 
-    /**
-     * Factory method: la única forma de crear un movimiento es aplicándolo a la cuenta,
-     * así es imposible tener un movimiento registrado que no haya afectado el saldo.
-     */
+
     public static Movimiento registrar(Cuenta cuenta, BigDecimal valor, LocalDateTime fecha) {
         BigDecimal saldoResultante = cuenta.aplicarMovimiento(valor);
         return new Movimiento(cuenta, valor, saldoResultante, fecha);
