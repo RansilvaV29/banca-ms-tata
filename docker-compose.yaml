@@ -10,7 +10,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - ./db.sql:/docker-entrypoint-initdb.d/01-BaseDatos.sql:ro
+      - ./BaseDatgos.sql:/docker-entrypoint-initdb.d/01-BaseDatos.sql:ro
       - pgdata:/var/lib/postgresql/data
     healthcheck:
       # -h localhost fuerza TCP: solo responde cuando terminó de ejecutar BaseDatos.sql

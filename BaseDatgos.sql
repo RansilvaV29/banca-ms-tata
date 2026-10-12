@@ -7,7 +7,7 @@
 --   cuentas_db  -> cuentas-service  (cuenta, movimiento, cliente_snapshot)
 --
 -- Se ejecuta automáticamente al levantar el contenedor de PostgreSQL
--- (docker-entrypoint-initdb.d) o manualmente con:  psql -U banca -f db.sql
+-- (docker-entrypoint-initdb.d) o manualmente con:  psql -U banca -f BaseDatgos.sql
 -- =====================================================================
 
 CREATE DATABASE clientes_db;
